@@ -1,5 +1,5 @@
 /* ==========================================================
-   אתר מלווה לסדנת מצגות — גרסה גנרית — סקריפט ראשי
+   אתר מלווה לסדנת מצגות - גרסה גנרית - סקריפט ראשי
    - ראוטר לפי hash (#/, #/outline, #/canvas, #/images, #/notebook)
    - מרנדר כל מסלול מתוך content.js
    - פרומפטים ניתנים לעריכה (textarea) + כפתור העתקה שקורא את הערך החי
@@ -53,7 +53,7 @@
     const textClass = isIdea ? "idea__prompt-text" : "prompt-box__text";
     const label =
       opts.label ||
-      (isIdea ? "פרומפט לדוגמה — ניתן לעריכה" : "פרומפט לדוגמה — אפשר לערוך לפני ההעתקה");
+      (isIdea ? "פרומפט לדוגמה - ניתן לעריכה" : "פרומפט לדוגמה - אפשר לערוך לפני ההעתקה");
     const lines = (String(text).match(/\n/g) || []).length + 1;
     const rows = Math.min(Math.max(lines, isIdea ? 4 : 3), isIdea ? 8 : 20);
     return `
@@ -63,14 +63,20 @@
           <span class="prompt-editable-hint" aria-hidden="true">✎ ניתן לעריכה</span>
         </div>
         <textarea class="${textClass}" rows="${rows}" spellcheck="false"
-          aria-label="${escapeHTML(label)} — שדה טקסט הניתן לעריכה לפני העתקה">${escapeHTML(text)}</textarea>
+          aria-label="${escapeHTML(label)} - שדה טקסט הניתן לעריכה לפני העתקה">${escapeHTML(text)}</textarea>
         ${copyButton()}
       </div>`;
   }
 
   // -------- רינדור צעד בודד --------
   function stepLI(step) {
-    const promptHTML = step.prompt ? promptField(step.prompt, { variant: "step" }) : "";
+    const promptHTML = step.prompt
+      ? promptField(step.prompt, { variant: "step", label: step.promptLabel })
+      : "";
+    const prompt2HTML = step.prompt2
+      ? promptField(step.prompt2, { variant: "step", label: step.prompt2Label })
+      : "";
+    const scorecardHTML = step.scorecard ? scorecardWidget(step.scorecard) : "";
     const tipHTML = step.tip ? `<div class="tip">${step.tip}</div>` : "";
     return `
       <li class="step">
@@ -79,9 +85,127 @@
           <h3 class="step__title">${escapeHTML(step.title)}</h3>
           <div class="step__text">${step.text}</div>
           ${promptHTML}
+          ${prompt2HTML}
+          ${scorecardHTML}
           ${tipHTML}
         </div>
       </li>`;
+  }
+
+  // -------- טבלת השוואה בין מודלים (ניקוד 1-5 לכל קריטריון) --------
+  // נשמרת בדפדפן של המשתתף/ת בלבד (localStorage), כדי שרענון לא ימחק את הניקוד.
+  function scorecardWidget(card) {
+    const models = card.models || [];
+    const criteria = card.criteria || [];
+    const options = ['<option value="">-</option>']
+      .concat([1, 2, 3, 4, 5].map((n) => `<option value="${n}">${n}</option>`))
+      .join("");
+    const head = models
+      .map((m) => `<th scope="col" lang="en" dir="ltr">${escapeHTML(m)}</th>`)
+      .join("");
+    const rows = criteria
+      .map((c, ci) => {
+        const cells = models
+          .map(
+            (m, mi) => `
+            <td>
+              <select class="scorecard__select" data-c="${ci}" data-m="${mi}"
+                aria-label="${escapeHTML(c.title)} - ניקוד ל-${escapeHTML(m)}">${options}</select>
+            </td>`
+          )
+          .join("");
+        return `
+          <tr>
+            <th scope="row">
+              <span class="scorecard__crit">${escapeHTML(c.title)}</span>
+              ${c.hint ? `<span class="scorecard__hint">${escapeHTML(c.hint)}</span>` : ""}
+            </th>
+            ${cells}
+          </tr>`;
+      })
+      .join("");
+    const totals = models
+      .map((m, mi) => `<td class="scorecard__total" data-total="${mi}">0</td>`)
+      .join("");
+    return `
+      <div class="scorecard" data-scorecard data-models="${escapeHTML(JSON.stringify(models))}">
+        <div class="scorecard__scroll" tabindex="0" role="region" aria-label="טבלת השוואה בין המודלים">
+          <table class="scorecard__table">
+            <caption class="sr-only">${escapeHTML(card.caption || "ניקוד המצגות של שלושת המודלים")}</caption>
+            <thead><tr><th scope="col">מה בודקים</th>${head}</tr></thead>
+            <tbody>${rows}</tbody>
+            <tfoot><tr><th scope="row">סה״כ</th>${totals}</tr></tfoot>
+          </table>
+        </div>
+        <div class="scorecard__footer">
+          <p class="scorecard__verdict" aria-live="polite">${escapeHTML(card.emptyVerdict || "דרגו כל מצגת מ-1 עד 5 - והמנצח יופיע כאן.")}</p>
+          <button type="button" class="scorecard__reset">איפוס הטבלה</button>
+        </div>
+      </div>`;
+  }
+
+  const SCORE_KEY = "ai-presentations-workshop:scorecard";
+
+  function bindScorecard(root) {
+    const selects = $$(".scorecard__select", root);
+    if (!selects.length) return;
+    const models = JSON.parse(root.dataset.models || "[]");
+
+    // שחזור ניקוד שמור (אם הדפדפן מאפשר)
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem(SCORE_KEY) || "{}"); } catch (e) { saved = {}; }
+    selects.forEach((s) => {
+      const key = `${s.dataset.c}-${s.dataset.m}`;
+      if (saved[key]) s.value = saved[key];
+    });
+
+    function update() {
+      const totals = models.map(() => 0);
+      const state = {};
+      let filled = 0;
+      selects.forEach((s) => {
+        if (s.value) {
+          totals[+s.dataset.m] += +s.value;
+          state[`${s.dataset.c}-${s.dataset.m}`] = s.value;
+          filled++;
+        }
+      });
+      totals.forEach((t, i) => {
+        const cell = root.querySelector(`[data-total="${i}"]`);
+        if (cell) cell.textContent = t;
+      });
+      try { localStorage.setItem(SCORE_KEY, JSON.stringify(state)); } catch (e) { /* פרטי/חסום - לא נורא */ }
+
+      const verdict = $(".scorecard__verdict", root);
+      $$(".scorecard__total", root).forEach((c) => c.classList.remove("is-winner"));
+      if (!filled) {
+        verdict.textContent = "דרגו כל מצגת מ-1 עד 5 - והמנצח יופיע כאן.";
+        return;
+      }
+      const best = Math.max(...totals);
+      const winners = models.filter((m, i) => totals[i] === best);
+      winners.forEach((m) => {
+        const cell = root.querySelector(`[data-total="${models.indexOf(m)}"]`);
+        if (cell) cell.classList.add("is-winner");
+      });
+      const done = filled === selects.length;
+      const prefix = done ? "המנצח שלכם" : "כרגע מוביל";
+      verdict.textContent =
+        winners.length === 1
+          ? `${prefix}: ${winners[0]} (${best} נקודות)`
+          : `תיקו בין ${winners.join(" ו-")} (${best} נקודות כל אחד)`;
+    }
+
+    selects.forEach((s) => s.addEventListener("change", update));
+    const reset = $(".scorecard__reset", root);
+    if (reset) {
+      reset.addEventListener("click", () => {
+        selects.forEach((s) => (s.value = ""));
+        update();
+        showToast("הטבלה אופסה.");
+      });
+    }
+    update();
   }
 
   // -------- רינדור צעדים: מקובצים (stepGroups) או שטוחים (steps) --------
@@ -93,7 +217,7 @@
           const steps = g.steps || [];
           const inner = steps.map(stepLI).join("");
           const noteHTML = g.note
-            ? `<p class="steps-group__note">${escapeHTML(g.note)}</p>`
+            ? `<p class="steps-group__note">${g.note}</p>`
             : "";
           const html = `
             <section class="steps-group steps-group--${g.accent || "setup"}" aria-label="${escapeHTML(g.label || "")}">
@@ -214,7 +338,7 @@
     });
     if (hasSteps) {
       blocks.push({
-        title: data.stepsTitle || "צעד אחר צעד — מתחילים",
+        title: data.stepsTitle || "צעד אחר צעד - מתחילים",
         id: `steps-${routeKey}`,
         body: stepsHTML,
       });
@@ -290,7 +414,7 @@
       ta.addEventListener("input", () => autoGrow(ta));
     });
 
-    // כפתורי העתקה — קוראים את הערך החי (אחרי עריכה) מה-textarea הסמוך
+    // כפתורי העתקה - קוראים את הערך החי (אחרי עריכה) מה-textarea הסמוך
     $$(".prompt-box__copy", section).forEach((btn) => {
       btn.addEventListener("click", async () => {
         const box = btn.closest(".prompt-box, .idea__prompt-box");
@@ -302,7 +426,7 @@
           const labelEl = btn.querySelector("span");
           const original = labelEl.textContent;
           labelEl.textContent = "הועתק!";
-          showToast("הטקסט הועתק. הדביקו ב-ChatGPT / Gemini / NotebookLM.");
+          showToast("הטקסט הועתק. עכשיו הדביקו אותו בכלי.");
           setTimeout(() => {
             btn.classList.remove("is-copied");
             labelEl.textContent = original;
@@ -310,10 +434,13 @@
         } catch (err) {
           // גיבוי: בחירת הטקסט בשדה כדי שאפשר יהיה להעתיק ידנית
           if (field && field.select) field.select();
-          showToast("לא הצלחתי להעתיק אוטומטית. הטקסט מסומן — העתיקו עם Ctrl+C.");
+          showToast("לא הצלחתי להעתיק אוטומטית. הטקסט מסומן - העתיקו עם Ctrl+C.");
         }
       });
     });
+
+    // טבלת השוואה (אם יש במסלול)
+    $$("[data-scorecard]", section).forEach(bindScorecard);
 
     // מסנן ציר יחיד
     const state = { useCase: "all" };
@@ -334,7 +461,7 @@
     ta.style.height = "auto";
     ta.style.height = Math.min(ta.scrollHeight + 2, 640) + "px";
   }
-  // גדילת כל תיבות הפרומפט הגלויות (רק גלויות — בתיבה מוסתרת scrollHeight=0)
+  // גדילת כל תיבות הפרומפט הגלויות (רק גלויות - בתיבה מוסתרת scrollHeight=0)
   function growAllPrompts() {
     $$(".prompt-box__text").forEach((ta) => {
       if (ta.offsetParent !== null) autoGrow(ta);
@@ -354,7 +481,7 @@
   }
 
   // -------- ראוטר --------
-  const ROUTES = ["outline", "canvas", "images", "notebook"];
+  const ROUTES = ["outline", "canvas", "images", "notebook", "html"];
 
   function renderRoute() {
     let route = (location.hash || "#/").replace(/^#/, "");
@@ -395,8 +522,9 @@
       "/": "סדנת מצגות עם AI",
       "/outline": "מסמך המתווה · סדנת מצגות",
       "/canvas": "Gemini Canvas · סדנת מצגות",
-      "/images": "ChatGPT Image2 · סדנת מצגות",
-      "/notebook": "NotebookLM · סדנת מצגות",
+      "/images": "ChatGPT Images · סדנת מצגות",
+      "/notebook": "Gemini Notebook · סדנת מצגות",
+      "/html": "מצגת HTML · סדנת מצגות",
     };
     document.title = titleMap[route] || titleMap["/"];
   }

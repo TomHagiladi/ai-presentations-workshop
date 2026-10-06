@@ -1,5 +1,5 @@
 /* ===========================================================
-   אתר מלווה לסדנת מצגות — גרסה גנרית (מתאימה לכל קהל)
+   אתר מלווה לסדנת מצגות - גרסה גנרית (מתאימה לכל קהל)
    שפה עיצובית: רשמי-נקי. גוון דומיננטי אחד (כחול-פטרול עמוק),
    רקע כמעט-לבן, טיפוגרפיה מכובדת, הרבה מרחב לבן.
    כותרות: Frank Ruhl Libre · גוף: Heebo.
@@ -9,7 +9,7 @@
    1. אסימוני עיצוב
    ========================================================== */
 :root {
-  /* פלטה — נקייה ומכובדת */
+  /* פלטה - נקייה ומכובדת */
   --bg: #f6f7f7;
   --bg-deep: #eef1f1;
   --surface: #ffffff;
@@ -19,7 +19,7 @@
   --line: #e1e6e8;
   --line-soft: #edf0f1;
 
-  /* גוון דומיננטי אחד — כחול-פטרול */
+  /* גוון דומיננטי אחד - כחול-פטרול */
   --accent: #0e5560;
   --accent-deep: #093b43;
   --accent-soft: #cfe3e6;
@@ -33,10 +33,15 @@
   --muted-accent: #4f5c64;  /* 5.8:1 על muted-tint, 6.9:1 על לבן */
   --muted-tint: #e8ecee;
 
-  /* ערכות צבע לכל מסלול — wayfinding: לכל מסלול גוון משלו (המתווה = כחול-פטרול ברירת המחדל) */
+  /* ערכות צבע לכל מסלול - wayfinding: לכל מסלול גוון משלו (המתווה = כחול-פטרול ברירת המחדל) */
   --track-canvas:   #33499e; --track-canvas-deep:   #24356f; --track-canvas-soft:   #d0d8f2; --track-canvas-tint:   #eaeefb;
   --track-images:   #1c6b45; --track-images-deep:   #12492e; --track-images-soft:   #c7e6d5; --track-images-tint:   #e5f3eb;
   --track-notebook: #8a3170; --track-notebook-deep: #6a2555; --track-notebook-soft: #eecfe4; --track-notebook-tint: #f8e9f3;
+  --track-html:     #a8233b; --track-html-deep:     #7c1a2c; --track-html-soft:     #f2cfd6; --track-html-tint:     #fbeaee;
+
+  /* גוונים נוספים לקבוצות צעדים (מסלול HTML) */
+  --violet: #5a3d99;      /* 8:1 על לבן */
+  --violet-tint: #efeaf8;
 
   /* מרווחים */
   --gap-1: 0.25rem; --gap-2: 0.5rem; --gap-3: 0.75rem; --gap-4: 1rem;
@@ -216,6 +221,10 @@ main {
   --accent: var(--track-images); --accent-deep: var(--track-images-deep);
   --accent-soft: var(--track-images-soft); --accent-tint: var(--track-images-tint);
 }
+.route--html {
+  --accent: var(--track-html); --accent-deep: var(--track-html-deep);
+  --accent-soft: var(--track-html-soft); --accent-tint: var(--track-html-tint);
+}
 .route--notebook {
   --accent: var(--track-notebook); --accent-deep: var(--track-notebook-deep);
   --accent-soft: var(--track-notebook-soft); --accent-tint: var(--track-notebook-tint);
@@ -289,10 +298,10 @@ main {
 .hero__hint strong { color: var(--accent-deep); }
 
 /* ==========================================================
-   7. דף הבית — היסוד (מתווה) + כרטיסי 3 המסלולים
+   7. דף הבית - היסוד (מתווה) + כרטיסי 3 המסלולים
    ========================================================== */
 
-/* היסוד — מסמך המתווה (רצועה רחבה ומובחנת) */
+/* היסוד - מסמך המתווה (רצועה רחבה ומובחנת) */
 .foundation {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -369,7 +378,7 @@ main {
   color: var(--ink);
 }
 
-/* כרטיסים — 3 מסלולים */
+/* כרטיסים - 3 מסלולים */
 .cards {
   display: grid;
   grid-template-columns: 1fr;
@@ -379,9 +388,7 @@ main {
 @media (min-width: 600px) {
   .cards { grid-template-columns: repeat(2, 1fr); gap: var(--gap-5); }
 }
-@media (min-width: 900px) {
-  .cards--tools { grid-template-columns: repeat(3, 1fr); }
-}
+/* ארבעה מסלולי כלים - 2×2 מ-600px ומעלה (במקום 3+1 לא מאוזן) */
 
 .card {
   --card-accent: var(--accent);
@@ -397,11 +404,12 @@ main {
   overflow: hidden;
   transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
 }
-/* צבע ייעודי לכל כרטיס — תואם את גוון המסלול (wayfinding מהבית) */
+/* צבע ייעודי לכל כרטיס - תואם את גוון המסלול (wayfinding מהבית) */
 .card--canvas   { --card-accent: var(--track-canvas);   --card-tint: var(--track-canvas-tint); }
 .card--images   { --card-accent: var(--track-images);   --card-tint: var(--track-images-tint); }
 .card--notebook { --card-accent: var(--track-notebook); --card-tint: var(--track-notebook-tint); }
-/* Canvas — הכלי שמתחילים ממנו: באדג' מלא בגוונו כדי שיבלוט */
+.card--html     { --card-accent: var(--track-html);     --card-tint: var(--track-html-tint); }
+/* Canvas - הכלי שמתחילים ממנו: באדג' מלא בגוונו כדי שיבלוט */
 .card--canvas .card__badge { background: var(--card-accent); color: #fff; }
 
 .card::before {
@@ -432,7 +440,7 @@ main {
   padding: 0.28rem 0.7rem;
   border-radius: 999px;
 }
-/* כרטיס ChatGPT — הבאדג' ׳חדש׳ משתמש בגוון הכרטיס (ירוק) כברירת מחדל */
+/* כרטיס ChatGPT - הבאדג' ׳חדש׳ משתמש בגוון הכרטיס (ירוק) כברירת מחדל */
 
 .card__num {
   font-family: "Frank Ruhl Libre", serif;
@@ -527,7 +535,7 @@ main {
 }
 
 /* ==========================================================
-   9. עמוד מסלול — פריסה משותפת
+   9. עמוד מסלול - פריסה משותפת
    ========================================================== */
 .track-header {
   padding: var(--gap-6);
@@ -714,6 +722,7 @@ main {
 }
 .step__num::before { content: counter(steps, decimal-leading-zero); }
 .step__body {
+  min-width: 0; /* בלי זה, טבלה רחבה בתוך הצעד מותחת את כל העמוד במובייל */
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
@@ -776,7 +785,7 @@ main {
   letter-spacing: 0;
   white-space: nowrap;
 }
-/* שדה הפרומפט — textarea ניתן לעריכה לפני העתקה */
+/* שדה הפרומפט - textarea ניתן לעריכה לפני העתקה */
 .prompt-box__text {
   font-family: "Heebo", sans-serif;
   font-size: var(--fs-base);
@@ -846,6 +855,8 @@ main {
 .steps-group--setup { --group-accent: var(--muted-accent); --group-tint: var(--muted-tint); }
 .steps-group--try   { --group-accent: var(--amber);        --group-tint: var(--amber-tint); }
 .steps-group--build { --group-accent: var(--accent);       --group-tint: var(--accent-tint); }
+.steps-group--compare { --group-accent: var(--violet);     --group-tint: var(--violet-tint); }
+.steps-group--media { --group-accent: #0e5560;             --group-tint: #e6f0f1; }
 
 .steps-group__head { margin-bottom: var(--gap-4); }
 .steps-group__label {
@@ -868,6 +879,112 @@ main {
 /* מספרי הצעדים בתוך הקבוצה מקבלים את גוון הקבוצה */
 .steps-group .step__num { color: var(--group-accent); }
 .steps-group .step:hover .step__body { border-color: var(--group-accent); }
+
+/* ==========================================================
+   11c. טבלת השוואה בין מודלים (מסלול HTML)
+   ========================================================== */
+.scorecard {
+  margin-top: var(--gap-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: var(--gap-3);
+}
+.scorecard__scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius-sm); }
+.scorecard__scroll:focus-visible { outline: 3px solid var(--group-accent, var(--accent)); outline-offset: 2px; }
+.scorecard__table { width: 100%; border-collapse: collapse; min-width: 30rem; }
+.scorecard__table th,
+.scorecard__table td {
+  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid var(--line-soft);
+  text-align: center;
+  vertical-align: middle;
+}
+.scorecard__table thead th {
+  font-size: var(--fs-sm);
+  font-weight: 800;
+  color: var(--ink);
+  background: var(--bg);
+  border-bottom: 2px solid var(--line);
+}
+.scorecard__table tbody th[scope="row"],
+.scorecard__table tfoot th[scope="row"] { text-align: right; font-weight: 600; }
+.scorecard__crit { display: block; font-size: var(--fs-sm); color: var(--ink); line-height: 1.35; }
+.scorecard__hint { display: block; font-size: var(--fs-xs); font-weight: 400; color: var(--ink-mute); line-height: 1.4; }
+.scorecard__select {
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  min-width: 3.6rem;
+  min-height: 40px;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+.scorecard__select:hover { border-color: var(--group-accent, var(--accent)); }
+.scorecard__select:focus-visible { outline: 3px solid var(--group-accent, var(--accent)); outline-offset: 2px; }
+.scorecard__table tfoot th,
+.scorecard__table tfoot td {
+  font-family: "Frank Ruhl Libre", serif;
+  font-weight: 800;
+  font-size: var(--fs-md);
+  border-bottom: none;
+  border-top: 2px solid var(--line);
+}
+.scorecard__total.is-winner { color: #fff; background: var(--group-accent, var(--accent)); border-radius: var(--radius-sm); }
+.scorecard__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--gap-3);
+  margin-top: var(--gap-3);
+}
+.scorecard__verdict { font-weight: 700; color: var(--ink); }
+.scorecard__reset {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  min-height: 40px;
+}
+.scorecard__reset:hover { border-color: var(--ink-soft); color: var(--ink); }
+
+/* מובייל: כל קריטריון בשורה משלו, ומתחתיו שלוש תיבות הניקוד ביישור לכותרות המודלים */
+@media (max-width: 599px) {
+  .scorecard { padding: var(--gap-2); }
+  .scorecard__table { min-width: 0; }
+  .scorecard__table thead tr,
+  .scorecard__table tbody tr,
+  .scorecard__table tfoot tr {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+  }
+  .scorecard__table thead th:first-child { display: none; }
+  .scorecard__table tbody th[scope="row"],
+  .scorecard__table tfoot th[scope="row"] {
+    grid-column: 1 / -1;
+    border-bottom: none;
+    padding-bottom: 0.15rem;
+  }
+  .scorecard__table th,
+  .scorecard__table td { padding: 0.45rem 0.3rem; }
+  .scorecard__select { width: 100%; min-width: 0; }
+}
+
+/* מובייל: מספר הצעד עובר מעל הצעד, כדי שלטקסט יהיה רוחב קריא */
+@media (max-width: 599px) {
+  .step { grid-template-columns: 1fr; gap: var(--gap-1); }
+  .step__num { font-size: var(--fs-xl); min-width: 0; }
+  .steps-group { padding: var(--gap-4) var(--gap-3) var(--gap-5); }
+  .step__body { padding: var(--gap-4); }
+}
 
 /* ==========================================================
    12. רעיונות + מסנן
@@ -1073,7 +1190,7 @@ main {
   border: 0;
 }
 
-/* יעדי מגע במובייל — 44px לפחות */
+/* יעדי מגע במובייל - 44px לפחות */
 @media (pointer: coarse) {
   .nav-link, .filter-chip, .track-back, .prompt-box__copy {
     min-height: 44px;
