@@ -38,6 +38,7 @@
   --track-images:   #1c6b45; --track-images-deep:   #12492e; --track-images-soft:   #c7e6d5; --track-images-tint:   #e5f3eb;
   --track-notebook: #8a3170; --track-notebook-deep: #6a2555; --track-notebook-soft: #eecfe4; --track-notebook-tint: #f8e9f3;
   --track-html:     #a8233b; --track-html-deep:     #7c1a2c; --track-html-soft:     #f2cfd6; --track-html-tint:     #fbeaee;
+  --track-toolkit:  #875111; --track-toolkit-deep:  #5e380b; --track-toolkit-soft:  #ecd9bf; --track-toolkit-tint:  #f6ecdd;
 
   /* גוונים נוספים לקבוצות צעדים (מסלול HTML) */
   --violet: #5a3d99;      /* 8:1 על לבן */
@@ -225,6 +226,10 @@ main {
   --accent: var(--track-html); --accent-deep: var(--track-html-deep);
   --accent-soft: var(--track-html-soft); --accent-tint: var(--track-html-tint);
 }
+.route--toolkit {
+  --accent: var(--track-toolkit); --accent-deep: var(--track-toolkit-deep);
+  --accent-soft: var(--track-toolkit-soft); --accent-tint: var(--track-toolkit-tint);
+}
 .route--notebook {
   --accent: var(--track-notebook); --accent-deep: var(--track-notebook-deep);
   --accent-soft: var(--track-notebook-soft); --accent-tint: var(--track-notebook-tint);
@@ -409,6 +414,9 @@ main {
 .card--images   { --card-accent: var(--track-images);   --card-tint: var(--track-images-tint); }
 .card--notebook { --card-accent: var(--track-notebook); --card-tint: var(--track-notebook-tint); }
 .card--html     { --card-accent: var(--track-html);     --card-tint: var(--track-html-tint); }
+.card--toolkit  { --card-accent: var(--track-toolkit);  --card-tint: var(--track-toolkit-tint); }
+/* כרטיס בונוס לרוחב כל הרשת (מתחת ל-2×2) */
+@media (min-width: 600px) { .card--wide { grid-column: 1 / -1; } }
 /* Canvas - הכלי שמתחילים ממנו: באדג' מלא בגוונו כדי שיבלוט */
 .card--canvas .card__badge { background: var(--card-accent); color: #fff; }
 

@@ -481,7 +481,7 @@
   }
 
   // -------- ראוטר --------
-  const ROUTES = ["outline", "canvas", "images", "notebook", "html"];
+  const ROUTES = ["outline", "canvas", "images", "notebook", "html", "toolkit"];
 
   function renderRoute() {
     let route = (location.hash || "#/").replace(/^#/, "");
@@ -525,6 +525,7 @@
       "/images": "ChatGPT Images · סדנת מצגות",
       "/notebook": "Gemini Notebook · סדנת מצגות",
       "/html": "מצגת HTML · סדנת מצגות",
+      "/toolkit": "ארגז כלים · סדנת מצגות",
     };
     document.title = titleMap[route] || titleMap["/"];
   }
