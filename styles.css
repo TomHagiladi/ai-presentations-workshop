@@ -302,15 +302,12 @@ main {
 }
 .hero__hint strong { color: var(--accent-deep); }
 
-/* קוד QR לאתר - ליד הכותרת, ובמסך מלא להצגה על המקרן */
-.hero-row { display: flex; flex-direction: column; gap: var(--gap-5); }
-@media (min-width: 900px) {
-  .hero-row { flex-direction: row; align-items: center; justify-content: space-between; }
-  .hero-row .hero { flex: 1 1 auto; }
-}
+/* קוד QR לאתר - לצד הפסקה הראשונה, ובמסך מלא להצגה על המקרן */
+.hero:has(.hero-qr) { max-width: 66rem; }
+.hero__body { display: flex; align-items: flex-start; gap: var(--gap-6); }
+.hero__text { flex: 1 1 auto; min-width: 0; }
 .hero-qr {
   flex: 0 0 auto;
-  align-self: center;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -325,7 +322,10 @@ main {
 }
 .hero-qr:hover { border-color: var(--accent); }
 .hero-qr:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.hero-qr__img { width: 220px; height: 220px; display: block; }
+.hero-qr__img { width: 200px; height: 200px; display: block; }
+@media (max-width: 899px) {
+  .hero-qr__img { width: 150px; height: 150px; }
+}
 .hero-qr__label { font-weight: 700; font-size: var(--fs-base); color: var(--accent-deep); }
 .hero-qr__hint { font-size: var(--fs-xs); color: var(--ink-mute); }
 @media (max-width: 599px) {

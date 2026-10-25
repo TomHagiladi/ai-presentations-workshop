@@ -47,7 +47,6 @@
 
 <!-- ============ HOME / LANDING ============ -->
 <section class="route route--home" data-route="/" hidden>
-  <div class="hero-row">
   <div class="hero">
     <p class="hero__eyebrow">
       <span class="dot"></span>
@@ -56,21 +55,24 @@
     <h1 class="hero__title">
       <span class="hero__highlight">יצירת מצגות עם בינה מלאכותית</span>
     </h1>
-    <p class="hero__lede">
-      מגוון דרכים ליצירת מצגות - ומסמך מתווה אחד שמכין לכולן את הקרקע.
-      כל מסלול עצמאי, עם מדריך צעד-אחר-צעד ופרומפטים לדוגמה (וניתנים לעריכה) להעתקה.
-    </p>
-    <p class="hero__hint" aria-live="polite">
-      <strong>אני זמין לשאלות לאורך כל הסדנה.</strong> נתקעתם באיזה שלב - פשוט קראו לי.
-    </p>
-  </div>
+    <div class="hero__body">
+      <div class="hero__text">
+        <p class="hero__lede">
+          מגוון דרכים ליצירת מצגות - ומסמך מתווה אחד שמכין לכולן את הקרקע.
+          כל מסלול עצמאי, עם מדריך צעד-אחר-צעד ופרומפטים לדוגמה (וניתנים לעריכה) להעתקה.
+        </p>
+        <p class="hero__hint" aria-live="polite">
+          <strong>אני זמין לשאלות לאורך כל הסדנה.</strong> נתקעתם באיזה שלב - פשוט קראו לי.
+        </p>
+      </div>
 
-  <!-- קוד QR לאתר - להצגה על המקרן -->
-  <button type="button" class="hero-qr" id="qr-open" aria-haspopup="dialog" aria-label="הגדלת קוד ה-QR לכתובת האתר, להצגה על המקרן">
-    <img src="assets/qr.svg" alt="קוד QR לכתובת האתר" class="hero-qr__img" width="220" height="220">
-    <span class="hero-qr__label">סרקו כדי להיכנס לאתר</span>
-    <span class="hero-qr__hint">לחיצה מגדילה למסך מלא</span>
-  </button>
+      <!-- קוד QR לאתר - לצד הפסקה, ובמסך מלא להצגה על המקרן -->
+      <button type="button" class="hero-qr" id="qr-open" aria-haspopup="dialog" aria-label="הגדלת קוד ה-QR לכתובת האתר, להצגה על המקרן">
+        <img src="assets/qr.svg" alt="קוד QR לכתובת האתר" class="hero-qr__img" width="200" height="200">
+        <span class="hero-qr__label">סרקו כדי להיכנס לאתר</span>
+        <span class="hero-qr__hint">לחיצה מגדילה למסך מלא</span>
+      </button>
+    </div>
   </div>
 
   <!-- היסוד: מסמך המתווה -->
