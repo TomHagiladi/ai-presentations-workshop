@@ -47,6 +47,7 @@
 
 <!-- ============ HOME / LANDING ============ -->
 <section class="route route--home" data-route="/" hidden>
+  <div class="hero-row">
   <div class="hero">
     <p class="hero__eyebrow">
       <span class="dot"></span>
@@ -62,6 +63,14 @@
     <p class="hero__hint" aria-live="polite">
       <strong>אני זמין לשאלות לאורך כל הסדנה.</strong> נתקעתם באיזה שלב - פשוט קראו לי.
     </p>
+  </div>
+
+  <!-- קוד QR לאתר - להצגה על המקרן -->
+  <button type="button" class="hero-qr" id="qr-open" aria-haspopup="dialog" aria-label="הגדלת קוד ה-QR לכתובת האתר, להצגה על המקרן">
+    <img src="assets/qr.svg" alt="קוד QR לכתובת האתר" class="hero-qr__img" width="220" height="220">
+    <span class="hero-qr__label">סרקו כדי להיכנס לאתר</span>
+    <span class="hero-qr__hint">לחיצה מגדילה למסך מלא</span>
+  </button>
   </div>
 
   <!-- היסוד: מסמך המתווה -->
@@ -209,6 +218,14 @@
   </div>
   <p class="site-footer__credit">נבנה בידי תום הגלעדי · 2026</p>
 </footer>
+
+<!-- QR במסך מלא - להצגה על המקרן -->
+<dialog class="qr-dialog" id="qr-dialog" aria-label="קוד QR לכתובת האתר">
+  <img src="assets/qr.svg" alt="קוד QR לכתובת האתר" class="qr-dialog__img">
+  <p class="qr-dialog__title">סרקו כדי להיכנס לאתר הסדנה</p>
+  <p class="qr-dialog__url" dir="ltr">tomhagiladi.github.io/ai-presentations-workshop</p>
+  <button type="button" class="qr-dialog__close" id="qr-close">סגירה</button>
+</dialog>
 
 <!-- Toast for "copied" feedback -->
 <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>

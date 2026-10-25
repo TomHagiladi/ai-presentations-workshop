@@ -302,6 +302,64 @@ main {
 }
 .hero__hint strong { color: var(--accent-deep); }
 
+/* קוד QR לאתר - ליד הכותרת, ובמסך מלא להצגה על המקרן */
+.hero-row { display: flex; flex-direction: column; gap: var(--gap-5); }
+@media (min-width: 900px) {
+  .hero-row { flex-direction: row; align-items: center; justify-content: space-between; }
+  .hero-row .hero { flex: 1 1 auto; }
+}
+.hero-qr {
+  flex: 0 0 auto;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-2);
+  padding: var(--gap-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  font: inherit;
+  color: var(--ink);
+  cursor: zoom-in;
+}
+.hero-qr:hover { border-color: var(--accent); }
+.hero-qr:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.hero-qr__img { width: 220px; height: 220px; display: block; }
+.hero-qr__label { font-weight: 700; font-size: var(--fs-base); color: var(--accent-deep); }
+.hero-qr__hint { font-size: var(--fs-xs); color: var(--ink-mute); }
+@media (max-width: 599px) {
+  .hero-qr { display: none; }
+}
+
+.qr-dialog {
+  margin: auto; /* האיפוס הגלובלי מבטל את המירכוז של דיאלוג */
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--gap-6);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: center;
+  max-width: 95vw;
+  max-height: 95vh;
+}
+.qr-dialog::backdrop { background: rgba(9, 59, 67, 0.85); }
+.qr-dialog__img { width: min(62vh, 80vw); height: min(62vh, 80vw); display: block; margin: 0 auto; }
+.qr-dialog__title { font-weight: 800; font-size: var(--fs-xl); margin-top: var(--gap-4); color: var(--accent-deep); }
+.qr-dialog__url { font-family: "JetBrains Mono", monospace; font-size: var(--fs-md); color: var(--ink-soft); margin-top: var(--gap-2); }
+.qr-dialog__close {
+  margin-top: var(--gap-4);
+  font: inherit;
+  font-weight: 700;
+  padding: 0.5rem 1.4rem;
+  border-radius: 999px;
+  border: 2px solid var(--accent);
+  background: var(--surface);
+  color: var(--accent-deep);
+  cursor: pointer;
+}
+.qr-dialog__close:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
 /* ==========================================================
    7. דף הבית - היסוד (מתווה) + כרטיסי 3 המסלולים
    ========================================================== */

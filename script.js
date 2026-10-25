@@ -530,6 +530,16 @@
     document.title = titleMap[route] || titleMap["/"];
   }
 
+  // -------- QR במסך מלא (להצגה על המקרן) --------
+  const qrDialog = document.getElementById("qr-dialog");
+  const qrOpen = document.getElementById("qr-open");
+  if (qrDialog && qrOpen && typeof qrDialog.showModal === "function") {
+    qrOpen.addEventListener("click", () => qrDialog.showModal());
+    document.getElementById("qr-close").addEventListener("click", () => qrDialog.close());
+    // לחיצה על הרקע סוגרת
+    qrDialog.addEventListener("click", (e) => { if (e.target === qrDialog) qrDialog.close(); });
+  }
+
   // -------- Boot --------
   window.addEventListener("hashchange", renderRoute);
   document.addEventListener("DOMContentLoaded", () => {
